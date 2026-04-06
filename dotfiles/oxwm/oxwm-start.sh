@@ -58,7 +58,7 @@ start_once fcitx5 -d
 start_once xfce4-clipman
 start_once pasystray
 start_once dunst -conf "$DUNSTRC_PATH"
-start_once Xwallpaper --zoom "$WALLPAPER"
+start_once xwallpaper --zoom "$WALLPAPER"
 
 
 # 启动 oxwm
