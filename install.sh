@@ -217,7 +217,7 @@ step_dotfiles() {
 
     log_info "复制 rofi 主题..."
     mkdir -p "$USER_HOME/.config/rofi"
-    cp -f "$PROJECT_DIR"/dotfiles/rofi-theme.rasi "$USER_HOME/.config/rofi/theme.rasi" || { log_error "rofi 主题复制失败"; return 1; }
+    cp -f "$PROJECT_DIR"/dotfiles/rofi/theme.rasi "$USER_HOME/.config/rofi/theme.rasi" || { log_error "rofi 主题复制失败"; return 1; }
 
     log_info "配置文件部署完成"
     return 0
