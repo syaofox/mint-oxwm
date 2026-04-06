@@ -30,7 +30,7 @@ USER_HOME="$HOME"
 
 # 获取脚本所在目录（即项目根目录）
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+PROJECT_DIR="$SCRIPT_DIR"
 
 # 步骤状态追踪
 declare -A STEP_STATUS
@@ -160,7 +160,7 @@ step_oxwm() {
     cd "$OXWM_SRC" || { log_error "无法进入 $OXWM_SRC"; return 1; }
 
     log_info "构建 OXWM (ReleaseSmall)..."
-    if ! zig build -Doptimize=ReleaseSmall --prefix /usr; then
+    if ! zig build -Doptimize=ReleaseSmall; then
         log_error "OXWM 构建失败"
         return 1
     fi
