@@ -1,6 +1,7 @@
 #!/bin/bash
 # Linux Mint 22.3 OXWM 安装脚本
 # 基于 docs/计划.md 自动化安装流程
+# 以普通用户运行，仅在需要的地方使用 sudo
 # 修正了原计划中的问题：
 #   - zig build 不应使用 sudo（仅 install 需要）
 #   - 合并了重复的依赖包列表
@@ -21,34 +22,28 @@ log_warn()  { echo -e "${YELLOW}[WARN]${NC}  $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 log_step()  { echo -e "\n${CYAN}==> $1${NC}"; }
 
+# 检查不应以 root 运行
+[[ "$EUID" -eq 0 ]] && log_error "请勿使用 root 运行此脚本，以普通用户身份运行即可"
+
+# 获取当前用户
+REAL_USER="$(whoami)"
+USER_HOME="$HOME"
+
 # 获取脚本所在目录（即项目根目录）
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
-# 检查是否为 root
-[[ "$EUID" -ne 0 ]] && log_error "请使用 sudo 运行此脚本"
-
-# 获取真实用户
-if [[ -n "${SUDO_USER:-}" ]]; then
-    REAL_USER="$SUDO_USER"
-else
-    REAL_USER=$(logname 2>/dev/null || echo "")
-    [[ -z "$REAL_USER" ]] && log_error "无法确定普通用户名，请使用 sudo 运行"
-fi
-USER_HOME=$(eval echo "~$REAL_USER")
-[[ ! -d "$USER_HOME" ]] && log_error "用户 $REAL_USER 的家目录 $USER_HOME 不存在"
-
 log_info "项目目录: $PROJECT_DIR"
-log_info "目标用户: $REAL_USER ($USER_HOME)"
+log_info "当前用户: $REAL_USER ($USER_HOME)"
 
 # ============================================================
 # 1. 安装系统依赖
 # ============================================================
 log_step "1/7 安装系统依赖..."
 
-apt update -y
+sudo apt update -y
 
-apt install -y \
+sudo apt install -y \
     build-essential python3-dev \
     git \
     libx11-dev libxft-dev libxinerama-dev libxrandr-dev \
@@ -88,9 +83,9 @@ else
     log_info "下载 Zig ${ZIG_VERSION} (${ZIG_ARCH})..."
     wget -q "$ZIG_URL" -O /tmp/zig.tar.xz
     log_info "解压到 /opt/..."
-    tar -xf /tmp/zig.tar.xz -C /opt/
-    rm -f /tmp/zig.tar.xz
-    ln -sf "$ZIG_DIR/zig" /usr/local/bin/zig
+    sudo tar -xf /tmp/zig.tar.xz -C /opt/
+    sudo rm -f /tmp/zig.tar.xz
+    sudo ln -sf "$ZIG_DIR/zig" /usr/local/bin/zig
 fi
 
 zig version
@@ -140,7 +135,7 @@ cd "$OXWM_SRC"
 log_info "构建 OXWM (ReleaseSmall)..."
 zig build -Doptimize=ReleaseSmall --prefix /usr
 log_info "安装 OXWM 到 /usr..."
-zig build -Doptimize=ReleaseSmall --prefix /usr install
+sudo zig build -Doptimize=ReleaseSmall --prefix /usr install
 log_info "OXWM 安装完成"
 
 # ============================================================
@@ -181,12 +176,15 @@ chmod +x "$OXWM_START_DST"
 
 # --- 其他 dotfiles ---
 log_info "复制 dunstrc..."
+mkdir -p "$USER_HOME/.config/dunst"
 cp -f "$PROJECT_DIR"/dotfiles/dunstrc "$USER_HOME/.config/dunst/dunstrc"
 
 log_info "复制 picom.conf..."
+mkdir -p "$USER_HOME/.config/picom"
 cp -f "$PROJECT_DIR"/dotfiles/picom.conf "$USER_HOME/.config/picom/picom.conf"
 
 log_info "复制 rofi 主题..."
+mkdir -p "$USER_HOME/.config/rofi"
 cp -f "$PROJECT_DIR"/dotfiles/rofi-theme.rasi "$USER_HOME/.config/rofi/theme.rasi"
 
 log_info "配置文件部署完成"
@@ -198,7 +196,7 @@ log_step "6/7 创建 LightDM 会话入口..."
 
 DESKTOP_FILE="/usr/share/xsessions/oxwm.desktop"
 
-cat > "$DESKTOP_FILE" <<EOF
+sudo tee "$DESKTOP_FILE" > /dev/null <<EOF
 [Desktop Entry]
 Encoding=UTF-8
 Name=oxwm
@@ -208,7 +206,7 @@ Icon=oxwm
 Type=XSession
 EOF
 
-chmod 644 "$DESKTOP_FILE"
+sudo chmod 644 "$DESKTOP_FILE"
 log_info "会话入口已创建: $DESKTOP_FILE"
 
 # ============================================================
