@@ -203,10 +203,7 @@ step_dotfiles() {
     local OXWM_START_DST="$OXWM_CONFIG_DIR/oxwm-start.sh"
 
     log_info "生成 oxwm-start.sh..."
-    sed -e "s|DUNSTRC_PATH=XXX|DUNSTRC_PATH=${PROJECT_DIR}/dotfiles/dunstrc|" \
-        -e "s|PICOM_PATH=xxx|PICOM_PATH=${PROJECT_DIR}/dotfiles/picom.conf|" \
-        -e "s|WALLPAPER=xxx|WALLPAPER=${PROJECT_DIR}/walls/black-nord.png|" \
-        "$OXWM_START_SRC" > "$OXWM_START_DST" || { log_error "oxwm-start.sh 生成失败"; return 1; }
+    cp -f "$OXWM_START_SRC" "$OXWM_START_DST" || { log_error "oxwm-start.sh 生成失败"; return 1; }
     chmod +x "$OXWM_START_DST"
 
     # --- 其他 dotfiles ---
