@@ -7,7 +7,7 @@ export QT_IM_MODULE=fcitx
 export GTK_IM_MODULE=fcitx
 export SDL_IM_MODULE=fcitx
 export SESSION_MANAGER=${SESSION_MANAGER:-local/$(hostname):$(ps -p $$ -o ppid=):oxwm}
-systemctl --user import-environment DISPLAY XAUTHORITY
+systemctl --user import-environment DISPLAY XAUTHORITY 2>/dev/null || true
 
 # 日志记录
 # 将标准输出和标准错误重定向到日志文件，限制日志大小

@@ -49,12 +49,13 @@ sudo apt install -y \
     libx11-dev libxft-dev libxinerama-dev libxrandr-dev \
     libxcursor-dev libxcomposite-dev libxdamage-dev \
     liblua5.4-dev \
-    rofi maim xclip xwallpaper dunst pasystray picom \
+    rofi maim xclip xsel xwallpaper dunst pasystray picom \
     wireplumber xfce4-clipman xdotool ffmpeg imagemagick \
     zenity x11-xserver-utils catfish vim lxappearance \
     fcitx5 fcitx5-chinese-addons fcitx5-frontend-gtk3 \
     fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-material-color \
-    gnome-keyring policykit-1-gnome wget curl xz-utils
+    gnome-keyring policykit-1-gnome wget curl xz-utils \
+    whiptail file rsync
 
 log_info "系统依赖安装完成"
 
@@ -120,7 +121,7 @@ log_info "Nerd Font 安装完成"
 # ============================================================
 log_step "4/7 编译安装 OXWM..."
 
-OXWM_REPO="git@github.com:syafee/oxwm.git"
+OXWM_REPO="git@github.com:syaofox/oxwm.git"
 OXWM_SRC="/tmp/oxwm"
 
 if [[ -d "$OXWM_SRC/.git" ]]; then
