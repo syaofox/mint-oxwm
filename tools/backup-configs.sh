@@ -15,6 +15,9 @@ NC='\033[0m'
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
+# 检查 whiptail
+command -v whiptail &>/dev/null || { echo "错误: 未安装 whiptail，请运行: sudo apt install whiptail"; exit 1; }
+
 # 备份目录
 BACKUP_BASE_DIR="${PROJECT_ROOT}/backups"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)

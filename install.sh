@@ -169,9 +169,9 @@ OXWM_START_SRC="$PROJECT_DIR/dotfiles/oxwm/oxwm-start.sh"
 OXWM_START_DST="$OXWM_CONFIG_DIR/oxwm-start.sh"
 
 log_info "生成 oxwm-start.sh (填充路径占位符)..."
-sed -e "s|DUNSTRC_PATH=XXX|DUNSTRC_PATH=$PROJECT_DIR/dotfiles/dunstrc|" \
-    -e "s|PICOM_PATH=xxx|PICOM_PATH=$PROJECT_DIR/dotfiles/picom.conf|" \
-    -e "s|WALLPAPER=xxx|WALLPAPER=$PROJECT_DIR/walls/black-nord.png|" \
+sed -e "s|DUNSTRC_PATH=XXX|DUNSTRC_PATH=${PROJECT_DIR}/dotfiles/dunstrc|" \
+    -e "s|PICOM_PATH=xxx|PICOM_PATH=${PROJECT_DIR}/dotfiles/picom.conf|" \
+    -e "s|WALLPAPER=xxx|WALLPAPER=${PROJECT_DIR}/walls/black-nord.png|" \
     "$OXWM_START_SRC" > "$OXWM_START_DST"
 chmod +x "$OXWM_START_DST"
 

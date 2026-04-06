@@ -16,6 +16,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 BACKUP_BASE_DIR="${PROJECT_ROOT}/backups"
 
+# 检查 whiptail
+command -v whiptail &>/dev/null || { echo "错误: 未安装 whiptail，请运行: sudo apt install whiptail"; exit 1; }
+
 RESTORE_COUNT=0
 SKIP_COUNT=0
 

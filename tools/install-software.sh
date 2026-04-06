@@ -95,8 +95,15 @@ install_chrome() {
         return
     fi
 
+    local arch
+    case "$(uname -m)" in
+        x86_64)  arch="amd64" ;;
+        aarch64) arch="arm64" ;;
+        *)       log_error "不支持的架构: $(uname -m)"; return ;;
+    esac
+
     wget -q -O /tmp/google-chrome.deb \
-        https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        "https://dl.google.com/linux/direct/google-chrome-stable_current_${arch}.deb"
     sudo apt install -y /tmp/google-chrome.deb
     rm -f /tmp/google-chrome.deb
     log_info "Google Chrome 安装完成"

@@ -8,7 +8,7 @@ configuration{
     modi: ["drun", "window", "run"];
     icon-theme: "Papirus-Dark";
     show-icons: true;
-    terminal: "alacritty";
+    terminal: "gnome-terminal";
     drun-display-format: "{icon} {name}";
     icon-color: "@foreground";
     location: 0;
