@@ -294,53 +294,33 @@ STEP_FUNCS=(
 )
 
 # ============================================================
-# 主循环
+# 主流程：顺序执行，失败则停止
 # ============================================================
 
-while true; do
-    # 构建菜单项
-    MENU_ITEMS=()
-    done_count=0
-    for i in {0..6}; do
-        step_num=$((i + 1))
-        status="${STEP_STATUS[$step_num]}"
-        case "$status" in
-            done)   MENU_ITEMS+=("$step_num" "${STEP_NAMES[$i]} [完成]" "off") ; ((done_count++)) ;;
-            fail)   MENU_ITEMS+=("$step_num" "${STEP_NAMES[$i]} [失败-重试]" "off") ;;
-            *)      MENU_ITEMS+=("$step_num" "${STEP_NAMES[$i]}" "off") ;;
-        esac
-    done
+for i in {0..6}; do
+    step_num=$((i + 1))
 
-    # 检查是否全部完成
-    if [[ $done_count -eq 7 ]]; then
+    # 显示当前步骤
+    whiptail --infobox "正在执行: ${STEP_NAMES[$i]}..." 5 50
+
+    if ${STEP_FUNCS[$i]}; then
+        STEP_STATUS[$step_num]="done"
+        whiptail --msgbox --title "成功" "${STEP_NAMES[$i]} 完成" 8 50
+    else
+        STEP_STATUS[$step_num]="fail"
+        if whiptail --yesno --title "失败" "${STEP_NAMES[$i]} 执行失败！\n\n是否重试？\n(取消 = 退出安装)" 10 50; then
+            ((i--))
+            continue
+        else
+            exit 1
+        fi
+    fi
+
+    # 全部完成
+    if [[ $step_num -eq 7 ]]; then
         whiptail --msgbox --title "安装完成" \
             "所有步骤已完成！\n\n请重启系统或重新登录，\n然后在 LightDM 界面选择 'oxwm' 会话。\n\n配置文件位置:\n  OXWM:  ~/.config/oxwm/\n  Dunst: ~/.config/dunst/dunstrc\n  Picom: ~/.config/picom/picom.conf\n  Rofi:  ~/.config/rofi/theme.rasi\n  Nemo:  ~/.local/share/nemo/actions/" \
             18 60
         exit 0
     fi
-
-    # 显示主菜单
-    CHOICE=$(whiptail --title "OXWM 安装 (空格选择, 回车执行)" \
-        --checklist "选择要执行的步骤 (可多选)" \
-        18 65 7 \
-        "${MENU_ITEMS[@]}" \
-        3>&1 1>&2 2>&3) || exit 0
-
-    [[ -z "$CHOICE" ]] && continue
-
-    # 执行选择的步骤
-    for step_num in $CHOICE; do
-        step_num=$(echo "$step_num" | tr -d '"')
-        idx=$((step_num - 1))
-
-        whiptail --infobox "正在执行: ${STEP_NAMES[$idx]}..." 5 50
-
-        if ${STEP_FUNCS[$idx]}; then
-            STEP_STATUS[$step_num]="done"
-            whiptail --msgbox --title "成功" "${STEP_NAMES[$idx]} 完成" 8 50
-        else
-            STEP_STATUS[$step_num]="fail"
-            whiptail --msgbox --title "失败" "${STEP_NAMES[$idx]} 失败！\n\n请检查错误信息后重试。" 10 50
-        fi
-    done
 done
