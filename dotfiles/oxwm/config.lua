@@ -216,6 +216,9 @@ oxwm.key.bind({ modkey }, "E", oxwm.spawn("nemo"))
 oxwm.key.bind({ modkey }, "S", oxwm.spawn({ "sh", "-c", "maim -s | xclip -selection clipboard -t image/png" }))
 oxwm.key.bind({ modkey }, "Q", oxwm.client.kill())
 
+-- System power menu (Ctrl+Alt+Delete)
+oxwm.key.bind({ "Control", "Mod1" }, "Delete", oxwm.spawn({ "sh", "-c", "$HOME/.config/rofi/sysact.sh" }))
+
 -- Keybind overlay - Shows important keybindings on screen
 oxwm.key.bind({ modkey, "Shift" }, "Slash", oxwm.show_keybinds())
 
