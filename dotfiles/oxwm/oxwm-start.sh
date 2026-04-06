@@ -24,12 +24,10 @@ xset -dpms &
 xset s off &
 xset s noblank &
 
-# 定义变量（自动基于脚本路径解析）
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
-DUNSTRC_PATH="$PROJECT_DIR/dotfiles/dunstrc"
-PICOM_PATH="$PROJECT_DIR/dotfiles/picom.conf"
-WALLPAPER="$PROJECT_DIR/walls/black-nord.png"
+# 定义变量
+DUNSTRC_PATH="$HOME/.config/dunst/dunstrc"
+PICOM_PATH="$HOME/.config/picom/picom.conf"
+WALLPAPER="$HOME/Pictures/wallpapers/black-nord.png"
 
 # 安全启动函数
 start_once() {
