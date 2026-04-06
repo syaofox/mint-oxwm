@@ -24,6 +24,17 @@ xset -dpms &
 xset s off &
 xset s noblank &
 
+# 自动设置最佳分辨率
+if command -v xrandr &>/dev/null; then
+    PRIMARY=$(xrandr --listmonitors 2>/dev/null | awk 'NR==2{print $4}' | cut -d+ -f1)
+    if [[ -n "$PRIMARY" ]]; then
+        PREFERRED=$(xrandr --query | sed -n "/^$PRIMARY connected/,/^[^ ]/p" | grep '+' | head -1 | awk '{print $1}')
+        if [[ -n "$PREFERRED" ]]; then
+            xrandr --output "$PRIMARY" --mode "$PREFERRED" &
+        fi
+    fi
+fi
+
 # 定义变量
 DUNSTRC_PATH="$HOME/.config/dunst/dunstrc"
 PICOM_PATH="$HOME/.config/picom/picom.conf"
