@@ -140,7 +140,7 @@ step_font() {
 step_oxwm() {
     log_step "4/7 编译安装 OXWM..."
 
-    local OXWM_REPO="git@github.com:syaofox/oxwm.git"
+    local OXWM_REPO="https://github.com/syaofox/oxwm.git"
     local OXWM_SRC="/tmp/oxwm"
 
     if [[ -d "$OXWM_SRC/.git" ]]; then
