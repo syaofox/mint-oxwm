@@ -209,11 +209,11 @@ step_dotfiles() {
     # --- 其他 dotfiles ---
     log_info "复制 dunstrc..."
     mkdir -p "$USER_HOME/.config/dunst"
-    cp -f "$PROJECT_DIR"/dotfiles/dunstrc "$USER_HOME/.config/dunst/dunstrc" || { log_error "dunstrc 复制失败"; return 1; }
+    cp -f "$PROJECT_DIR"/dotfiles/dunst/dunstrc "$USER_HOME/.config/dunst/dunstrc" || { log_error "dunstrc 复制失败"; return 1; }
 
     log_info "复制 picom.conf..."
     mkdir -p "$USER_HOME/.config/picom"
-    cp -f "$PROJECT_DIR"/dotfiles/picom.conf "$USER_HOME/.config/picom/picom.conf" || { log_error "picom.conf 复制失败"; return 1; }
+    cp -f "$PROJECT_DIR"/dotfiles/picom/picom.conf "$USER_HOME/.config/picom/picom.conf" || { log_error "picom.conf 复制失败"; return 1; }
 
     log_info "复制 rofi 主题..."
     mkdir -p "$USER_HOME/.config/rofi"
