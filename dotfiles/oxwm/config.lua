@@ -209,7 +209,7 @@ oxwm.bar.set_scheme_urgent(colors.red, colors.bg, colors.red)
 
 oxwm.key.bind({ modkey }, "Return", oxwm.spawn_terminal())
 -- Launch Rofi
-oxwm.key.bind({ modkey }, "D", oxwm.spawn({ "sh", "-c", "rofi -show drun -theme-str \"listview { columns: 4; } window { width: 40%; height: 60%; }\" -show-icons" }))
+oxwm.key.bind({ modkey }, "D", oxwm.spawn({ "sh", "-c", "rofi -show drun -theme theme -show-icons" }))
 -- Launch nemo
 oxwm.key.bind({ modkey }, "E", oxwm.spawn("nemo"))
 -- Copy screenshot to clipboard
