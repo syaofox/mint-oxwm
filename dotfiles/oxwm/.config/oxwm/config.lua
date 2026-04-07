@@ -59,7 +59,7 @@ local blocks = {
         underline = false,
     }),
     oxwm.bar.block.static({
-        text = " ",
+        text = "│",
         interval = 999999999,
         color = colors.lavender,
         underline = false,
@@ -77,24 +77,12 @@ local blocks = {
         underline = false,
     }),
     oxwm.bar.block.static({
-        text = " ",
+        text = "│",
         interval = 999999999,
         color = colors.lavender,
         underline = false,
     }),
 
-    oxwm.bar.block.gpu({
-        format = "GPU {gpu_util}% VRAM {vram_used}/{vram_total}G",
-        interval = 3,
-        color = 0x9ece6a,
-    }),
-
-    oxwm.bar.block.static({
-        text = " ",
-        interval = 999999999,
-        color = colors.lavender,
-        underline = false,
-    }),
     -- oxwm.bar.block.shell({
     --     format = "{}",
     --     command = "uname -r",
@@ -103,7 +91,7 @@ local blocks = {
     --     underline = false,
     -- }),
     -- oxwm.bar.block.static({
-    --     text = " ",
+    --     text = "│",
     --     interval = 999999999,
     --     color = colors.lavender,
     --     underline = false,
@@ -116,7 +104,7 @@ local blocks = {
         underline = false,
     }),
     oxwm.bar.block.static({
-        text = " ",
+        text = "│",
         interval = 999999999,
         color = colors.lavender,
         underline = false,
