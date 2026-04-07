@@ -71,7 +71,7 @@ local blocks = {
     oxwm.bar.block.gpu({
         format = "GPU {gpu_util}% VRAM {vram_used}/{vram_total}G",
         interval = 3,
-        color = colors.fg,
+        color = colors.purple,
         underline = false,
     }),
     oxwm.bar.block.static({
@@ -85,14 +85,14 @@ local blocks = {
     oxwm.bar.block.cpu({
         format = "CPU: {}%",
         interval = 2,
-        color = colors.fg,
+        color = colors.light_blue,
         underline = false,
     }),    
     -- 内存监控，显示已用和总内存（单位GB）
     oxwm.bar.block.ram({
         format = "Ram: {used}/{total} GB",
         interval = 5,
-        color = colors.fg,
+        color = colors.light_blue,
         underline = false,
     }),
     oxwm.bar.block.static({
@@ -132,7 +132,7 @@ local blocks = {
         format = "Vol: {}%",
         command = "pactl get-sink-volume @DEFAULT_SINK@ | grep -o '[0-9]*%' | head -1 | tr -d '%'",
         interval = 1,
-        color = colors.fg,
+        color = colors.red,
         underline = false,
         click = "pavucontrol",
     }),1
