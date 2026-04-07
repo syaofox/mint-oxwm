@@ -171,7 +171,7 @@ oxwm.gaps.set_outer(5, 5)
 -- - Configure window behavior based on title or class
 
 -- Examples (uncomment to use):
-oxwm.rule.add({ class = "firefox", tag = 2 })
+oxwm.rule.add({ class = "Pavucontrol ", floating = true })
 -- oxwm.rule.add({ instance = "gimp", floating = true })
 -- oxwm.rule.add({ class = "Alacritty", tag = 9, focus = true })
 -- oxwm.rule.add({ class = "firefox", title = "Library", floating = true })
@@ -226,8 +226,13 @@ oxwm.key.bind({ modkey }, "Return", oxwm.spawn_terminal())
 oxwm.key.bind({ modkey }, "D", oxwm.spawn({ "sh", "-c", "rofi -show drun -theme theme -show-icons" }))
 -- Launch nemo
 oxwm.key.bind({ modkey }, "E", oxwm.spawn("nemo"))
+-- xfce4-clipman-history
+oxwm.key.bind({ modkey }, "V", oxwm.spawn("xfce4-clipman-history"))
+
 -- Copy screenshot to clipboard
 oxwm.key.bind({ modkey }, "S", oxwm.spawn({ "sh", "-c", "maim -s | xclip -selection clipboard -t image/png" }))
+-- Save screenshot to $HOME/Pictures/Screenshots
+oxwm.key.bind({ modkey, "Shift" }, "S", oxwm.spawn({ "sh", "-c", "mkdir -p $HOME/Pictures/Screenshots && maim -s $HOME/Pictures/Screenshots/screenshot_$(date +%Y%m%d_%H%M%S).png" }))
 oxwm.key.bind({ modkey }, "Q", oxwm.client.kill())
 
 -- System power menu (Ctrl+Alt+Delete)

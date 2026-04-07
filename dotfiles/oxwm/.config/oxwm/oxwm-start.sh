@@ -83,6 +83,9 @@ DUNSTRC_PATH="$HOME/.config/dunst/dunstrc"
 PICOM_PATH="$HOME/.config/picom/picom.conf"
 WALLPAPER="$HOME/Pictures/wallpapers/black-nord.png"
 
+# 确保截图保存目录存在
+mkdir -p "$HOME/Pictures/Screenshots"
+
 # ============================================================
 # 6. 防重复启动函数
 # ============================================================
