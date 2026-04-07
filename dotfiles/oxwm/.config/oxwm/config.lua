@@ -60,47 +60,47 @@ local blocks = {
         color = colors.fg,
         underline = false,
     },
-    oxwm.bar.block.static({
-        text = "│",
-        interval = 999999999,
-        color = colors.lavender,
-        underline = false,
-    }),
+    -- oxwm.bar.block.static({
+    --     text = "│",
+    --     interval = 999999999,
+    --     color = colors.lavender,
+    --     underline = false,
+    -- }),
 
     -- GPU监控，支持NVIDIA和AMD显卡
     oxwm.bar.block.gpu({
         format = "GPU {gpu_util}% VRAM {vram_used}/{vram_total}G",
         interval = 3,
-        color = 0x9ece6a,
+        color = colors.fg,
         underline = false,
     }),
-    oxwm.bar.block.static({
-        text = "│",
-        interval = 999999999,
-        color = colors.lavender,
-        underline = false,
-    }),
+    -- oxwm.bar.block.static({
+    --     text = "│",
+    --     interval = 999999999,
+    --     color = colors.lavender,
+    --     underline = false,
+    -- }),
 
     -- CPU监控，显示使用率百分比
     oxwm.bar.block.cpu({
         format = "CPU: {}%",
         interval = 2,
-        color = 0x7aa2f7,
+        color = colors.fg,
         underline = false,
     }),    
     -- 内存监控，显示已用和总内存（单位GB）
     oxwm.bar.block.ram({
         format = "Ram: {used}/{total} GB",
         interval = 5,
-        color = colors.light_blue,
+        color = colors.fg,
         underline = false,
     }),
-    oxwm.bar.block.static({
-        text = "│",
-        interval = 999999999,
-        color = colors.lavender,
-        underline = false,
-    }),
+    -- oxwm.bar.block.static({
+    --     text = "│",
+    --     interval = 999999999,
+    --     color = colors.lavender,
+    --     underline = false,
+    -- }),
 
     -- oxwm.bar.block.shell({
     --     format = "{}",
@@ -122,17 +122,17 @@ local blocks = {
         color = colors.cyan,
         underline = false,
     }),
-    oxwm.bar.block.static({
-        text = "│",
-        interval = 999999999,
-        color = colors.lavender,
-        underline = false,
-    }),
+    -- oxwm.bar.block.static({
+    --     text = "│",
+    --     interval = 999999999,
+    --     color = colors.lavender,
+    --     underline = false,
+    -- }),
     oxwm.bar.block.shell({
         format = "Vol: {}%",
         command = "pactl get-sink-volume @DEFAULT_SINK@ | grep -o '[0-9]*%' | head -1 | tr -d '%'",
         interval = 1,
-        color = colors.green,
+        color = colors.fg,
         underline = false,
         click = "pavucontrol",
     }),1
