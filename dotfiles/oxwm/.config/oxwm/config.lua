@@ -96,15 +96,12 @@ local blocks = {
     --     color = colors.lavender,
     --     underline = false,
     -- }),
-    
-   
-    oxwm.bar.block.shell({
-        format = "Vol: {}%",
-        command = "pactl get-sink-volume @DEFAULT_SINK@ | grep -o '[0-9]*%' | head -1 | tr -d '%'",
+    oxwm.bar.block.datetime({
+        format = "{}",
+        date_format = "%m-%d %H:%M",
         interval = 1,
-        color = colors.green,
+        color = colors.cyan,
         underline = false,
-        click = "pavucontrol",
     }),
     oxwm.bar.block.static({
         text = "│",
@@ -112,12 +109,13 @@ local blocks = {
         color = colors.lavender,
         underline = false,
     }),
-    oxwm.bar.block.datetime({
-        format = "{}",
-        date_format = "%m-%d %H:%M",
+    oxwm.bar.block.shell({
+        format = "󰖀 {}%",
+        command = "pactl get-sink-volume @DEFAULT_SINK@ | grep -o '[0-9]*%' | head -1 | tr -d '%'",
         interval = 1,
-        color = colors.cyan,
+        color = colors.green,
         underline = false,
+        click = "pavucontrol",
     }),
     -- Uncomment to add battery status (useful for laptops)
     -- oxwm.bar.block.battery({
