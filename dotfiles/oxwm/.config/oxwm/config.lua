@@ -83,6 +83,20 @@ local blocks = {
         color = colors.cyan,
         underline = true,
     }),
+    oxwm.bar.block.static({
+        text = "│",
+        interval = 999999999,
+        color = colors.lavender,
+        underline = false,
+    }),
+    oxwm.bar.block.shell({
+        format = "Vol: {}%",
+        command = "pactl get-sink-volume @DEFAULT_SINK@ | grep -o '[0-9]*%' | head -1 | tr -d '%'",
+        interval = 1,
+        color = colors.green,
+        underline = true,
+        click = "pavucontrol",
+    }),
     -- Uncomment to add battery status (useful for laptops)
     -- oxwm.bar.block.battery({
     --     format = "Bat: {}%",

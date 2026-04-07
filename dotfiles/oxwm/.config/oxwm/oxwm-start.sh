@@ -125,7 +125,13 @@ fi
 
 # Polkit 认证代理（lxpolkit）
 # 用于 GUI 程序提权时弹出密码输入框（如磁盘管理、软件安装等）
-start_once start_once /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+start_once /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+
+# PipeWire 音频服务 + Wireplumber 会话管理器
+# PipeWire 是 PulseAudio 的现代替代品，wireplumber 负责设备管理和策略
+start_once pipewire
+start_once pipewire-pulse
+start_once wireplumber
 
 # 合成器（后台模式，指定配置文件）
 start_once picom -b --config "$PICOM_PATH"
