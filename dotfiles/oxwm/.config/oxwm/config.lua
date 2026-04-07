@@ -84,10 +84,10 @@ local blocks = {
     -- CPU监控，显示使用率百分比
     oxwm.bar.block.cpu({
         format = "CPU: {}%",
-        command = "htop",
         interval = 2,
         color = colors.light_blue,
         underline = false,
+        click = "gnome-terminal -e htop",
     }),    
     -- 内存监控，显示已用和总内存（单位GB）
     oxwm.bar.block.ram({
