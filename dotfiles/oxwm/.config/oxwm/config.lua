@@ -116,13 +116,8 @@ local blocks = {
         color = colors.green,
         underline = false,
         click = "pavucontrol",
-    }),
-    oxwm.bar.block.static({
-        text = " ",
-        interval = 999999999,
-        color = colors.lavender,
-        underline = false,
-    }),
+    }),1
+    
     -- Uncomment to add battery status (useful for laptops)
     -- oxwm.bar.block.battery({
     --     format = "Bat: {}%",
