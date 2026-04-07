@@ -31,31 +31,31 @@ restore_item() {
     local desc="$3"
 
     if [ ! -e "$src" ]; then
-        echo -e "${YELLOW}⊘${NC} $desc (备份中不存在)"
+        echo -e "[SKIP] $desc (备份中不存在)"
         ((SKIP_COUNT++))
         return 1
     fi
 
     if [ -e "$dest" ]; then
         if ! whiptail --yesno "$desc 已存在，是否覆盖？" 8 60; then
-            echo -e "${YELLOW}⊘${NC} 跳过"
+            echo -e "[SKIP] 跳过"
             ((SKIP_COUNT++))
             return 1
         fi
     fi
 
     mkdir -p "$(dirname "$dest")" || {
-        echo -e "${RED}✗${NC} 无法创建目录: $(dirname "$dest")"
+        echo -e "[ERROR] 无法创建目录: $(dirname "$dest")"
         ((SKIP_COUNT++))
         return 1
     }
 
     if cp -r "$src" "$dest" 2>/dev/null; then
-        echo -e "${GREEN}✓${NC} $desc"
+        echo -e "[OK] $desc"
         ((RESTORE_COUNT++))
         return 0
     else
-        echo -e "${RED}✗${NC} 还原失败: $desc"
+        echo -e "[ERROR] 还原失败: $desc"
         ((SKIP_COUNT++))
         return 1
     fi
@@ -245,7 +245,7 @@ for item in "${SELECTED[@]}"; do
                     chmod 644 "$HOME/.ssh"/*.pub 2>/dev/null || true
                 fi
             else
-                echo -e "${YELLOW}⊘${NC} 跳过 SSH 配置"
+                echo -e "[SKIP] 跳过 SSH 配置"
                 ((SKIP_COUNT++))
             fi
             ;;
@@ -256,7 +256,7 @@ for item in "${SELECTED[@]}"; do
                     chmod 700 "$HOME/.gnupg"
                 fi
             else
-                echo -e "${YELLOW}⊘${NC} 跳过 GPG 配置"
+                echo -e "[SKIP] 跳过 GPG 配置"
                 ((SKIP_COUNT++))
             fi
             ;;

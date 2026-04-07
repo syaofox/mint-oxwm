@@ -14,19 +14,19 @@ NC='\033[0m' # No Color
 
 # 打印带颜色的消息
 print_success() {
-    echo -e "${GREEN}✓${NC} $1"
+    echo -e "${GREEN}[OK]${NC} $1"
 }
 
 print_info() {
-    echo -e "${BLUE}ℹ${NC} $1"
+    echo -e "${BLUE}[INFO]${NC} $1"
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠${NC} $1"
+    echo -e "${YELLOW}[WARN]${NC} $1"
 }
 
 print_error() {
-    echo -e "${RED}✗${NC} $1"
+    echo -e "${RED}[ERROR]${NC} $1"
 }
 
 # 检查 Git 是否已安装
@@ -198,19 +198,19 @@ fi
 # 显示配置摘要
 echo -e "\n${BLUE}=== 配置摘要 ===${NC}"
 echo -e "${GREEN}已完成的配置：${NC}"
-echo "  • 用户身份信息"
-echo "  • 文本编辑器"
-echo "  • 常用别名 (st, co, br, ci, lg)"
-echo "  • 终端颜色"
-echo "  • 换行符处理"
+echo "  - 用户身份信息"
+echo "  - 文本编辑器"
+echo "  - 常用别名 (st, co, br, ci, lg)"
+echo "  - 终端颜色"
+echo "  - 换行符处理"
 
 echo -e "\n${BLUE}当前全局配置：${NC}"
 git config --global --list | sed 's/^/  /'
 
 echo -e "\n${GREEN}配置完成！${NC}"
 echo -e "\n${BLUE}提示：${NC}"
-echo "  • 使用 'git st' 代替 'git status'"
-echo "  • 使用 'git lg' 查看美化的提交历史"
-echo "  • 使用 'git config --global --list' 查看所有配置"
-echo "  • 使用 'git config --global --unset <key>' 删除某个配置"
+echo "  - 使用 'git st' 代替 'git status'"
+echo "  - 使用 'git lg' 查看美化的提交历史"
+echo "  - 使用 'git config --global --list' 查看所有配置"
+echo "  - 使用 'git config --global --unset <key>' 删除某个配置"
 

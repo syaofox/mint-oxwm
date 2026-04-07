@@ -37,24 +37,24 @@ backup_item() {
         local link_target
         link_target=$(readlink -f "$src")
         if [[ "$link_target" == "$PROJECT_ROOT"* ]]; then
-            echo -e "${BLUE}⊘${NC} $desc (软链接指向项目目录，跳过)"
+            echo -e "[SKIP] $desc (软链接指向项目目录，跳过)"
             ((SKIP_COUNT++))
             return 1
         else
             mkdir -p "$(dirname "$dest")"
             cp -r "$src" "$dest"
-            echo -e "${GREEN}✓${NC} $desc (软链接)"
+            echo -e "[OK] $desc (软链接)"
             ((BACKUP_COUNT++))
             return 0
         fi
     elif [ -e "$src" ]; then
         mkdir -p "$(dirname "$dest")"
         cp -r "$src" "$dest"
-        echo -e "${GREEN}✓${NC} $desc"
+        echo -e "[OK] $desc"
         ((BACKUP_COUNT++))
         return 0
     else
-        echo -e "${YELLOW}⊘${NC} $desc (不存在，跳过)"
+        echo -e "[SKIP] $desc (不存在，跳过)"
         ((SKIP_COUNT++))
         return 1
     fi

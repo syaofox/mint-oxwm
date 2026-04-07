@@ -9,10 +9,9 @@ A **Linux Mint 22.3 post-install setup** for OXWM (a Zig-based dynamic window ma
 | Path | Purpose |
 |---|---|
 | `install.sh` | Main entry point — 7-step interactive installer (whiptail menu) |
-| `dotfiles/` | Config templates deployed to `~/.config/` and `~/.local/share/` |
-| `dotfiles/oxwm/` | OXWM `config.lua` + `oxwm-start.sh` (session launcher) |
-| `dotfiles/dunst/`, `picom/`, `rofi/` | Notification, compositor, launcher configs |
-| `dotfiles/nemo/` | Nemo file manager actions (`.nemo_action`) and scripts (`.sh`) |
+| `dotfiles/` | Stow-style symlink packages — each subdirectory mirrors target paths |
+| `dotfiles/<pkg>/.config/...` | Symlinked to `~/.config/...` on install |
+| `dotfiles/<pkg>/.local/share/...` | Symlinked to `~/.local/share/...` on install |
 | `tools/` | Standalone utility scripts (backup, restore, software install, btrfs, zram) |
 | `walls/` | Wallpaper images copied to `~/Pictures/wallpapers/` |
 | `docs/计划.md` | Original install plan (Chinese) |
@@ -21,12 +20,20 @@ A **Linux Mint 22.3 post-install setup** for OXWM (a Zig-based dynamic window ma
 
 ```bash
 bash install.sh              # Run the full 7-step interactive installer
+bash tools/uninstall.sh      # Remove all symlinks and installed components
 bash tools/backup-configs.sh # Interactive backup of user configs (whiptail)
 bash tools/restore-configs.sh# Interactive restore from backups/
 bash tools/install-software.sh # Install Brave/Chrome/VSCode/Docker (whiptail)
 bash tools/mint_btrfs.sh     # Btrfs subvolume optimization (requires sudo)
 bash tools/setup_zram.sh     # ZRAM swap setup (requires sudo)
 ```
+
+## Dotfiles deployment (stow-style symlinks)
+
+- **Symlink approach**: `install.sh` creates symbolic links from `~/.config/` and `~/.local/share/` pointing to `dotfiles/<pkg>/` in the project
+- **Existing files are backed up**: If a target file already exists, it's renamed to `<file>.bak` before creating the symlink
+- **Idempotent**: Re-running `step_dotfiles` skips already-linked files and warns about changed links
+- **Uninstall**: `bash tools/uninstall.sh` safely removes only the symlinks created by this project
 
 ## Critical constraints
 

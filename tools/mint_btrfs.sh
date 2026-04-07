@@ -101,7 +101,7 @@ for t in "${TARGETS[@]}"; do
 
     # 检查是否已经是子卷
     if btrfs subvolume show "$DIR" &>/dev/null; then
-        log_info "✅ $DIR 已经是子卷，跳过"
+        log_info "$DIR 已经是子卷，跳过"
         continue
     fi
 
@@ -190,7 +190,7 @@ for t in "${TARGETS[@]}"; do
         log_info "$DIR 挂载项已存在于 fstab，跳过添加"
     fi
 
-    log_info "✅ $DIR 处理完成"
+    log_info "$DIR 处理完成"
 done
 
 # 清理临时挂载

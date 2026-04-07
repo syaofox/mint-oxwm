@@ -42,24 +42,26 @@ for i in {1..7}; do STEP_STATUS[$i]="pending"; done
 
 step_deps() {
     log_step "1/7 安装系统依赖..."
-    if sudo apt update -y 2>&1 | tail -5; then
-        if sudo apt install -y \
-            build-essential python3-dev \
-            git \
-            libx11-dev libxft-dev libxinerama-dev libxrandr-dev \
-            libxcursor-dev libxcomposite-dev libxdamage-dev \
-            liblua5.4-dev \
-            rofi maim xclip xsel xwallpaper dunst pasystray picom \
-            wireplumber xfce4-clipman xdotool ffmpeg imagemagick \
-            zenity x11-xserver-utils catfish vim lxappearance \
-            fcitx5 fcitx5-chinese-addons fcitx5-frontend-gtk3 \
-            fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-material-color \
-            gnome-keyring policykit-1-gnome wget curl xz-utils \
-            slock \
-            whiptail file rsync 2>&1 | tail -5; then
-            log_info "系统依赖安装完成"
-            return 0
-        fi
+    if ! sudo apt update -y; then
+        log_error "apt update 失败"
+        return 1
+    fi
+    if sudo apt install -y \
+        build-essential python3-dev \
+        git \
+        libx11-dev libxft-dev libxinerama-dev libxrandr-dev \
+        libxcursor-dev libxcomposite-dev libxdamage-dev \
+        liblua5.4-dev \
+        rofi maim xclip xsel xwallpaper dunst pasystray picom \
+        wireplumber xfce4-clipman xdotool ffmpeg imagemagick \
+        zenity x11-xserver-utils catfish vim lxappearance \
+        fcitx5 fcitx5-chinese-addons fcitx5-frontend-gtk3 \
+        fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-material-color \
+        gnome-keyring policykit-1-gnome wget curl xz-utils \
+        slock \
+        whiptail file rsync; then
+        log_info "系统依赖安装完成"
+        return 0
     fi
     log_error "系统依赖安装失败"
     return 1
@@ -158,73 +160,107 @@ step_oxwm() {
         fi
     fi
 
-    cd "$OXWM_SRC" || { log_error "无法进入 $OXWM_SRC"; return 1; }
+    (
+        cd "$OXWM_SRC" || { log_error "无法进入 $OXWM_SRC"; return 1; }
 
-    log_info "构建 OXWM (ReleaseSmall)..."
-    if ! zig build -Doptimize=ReleaseSmall; then
-        log_error "OXWM 构建失败"
-        return 1
-    fi
+        log_info "构建 OXWM (ReleaseSmall)..."
+        if ! zig build -Doptimize=ReleaseSmall; then
+            log_error "OXWM 构建失败"
+            return 1
+        fi
 
-    log_info "安装 OXWM 到 /usr..."
-    if ! sudo zig build -Doptimize=ReleaseSmall --prefix /usr install; then
-        log_error "OXWM 安装失败"
-        return 1
-    fi
+        log_info "安装 OXWM 到 /usr..."
+        if ! sudo zig build -Doptimize=ReleaseSmall --prefix /usr install; then
+            log_error "OXWM 安装失败"
+            return 1
+        fi
+    ) || return 1
 
     log_info "OXWM 安装完成"
     return 0
 }
 
+# Stow 风格 symlink 部署
+# 每个 dotfiles/<包> 目录内模拟目标路径结构（如 .config/...、.local/share/...）
+# 部署时在 $HOME 下创建符号链接指向项目目录
+
+DOTFILE_PACKAGES=(oxwm dunst picom rofi nemo)
+
+stow_package() {
+    local pkg="$1"
+    local pkg_dir="$PROJECT_DIR/dotfiles/$pkg"
+
+    if [[ ! -d "$pkg_dir" ]]; then
+        log_error "包目录不存在: $pkg_dir"
+        return 1
+    fi
+
+    log_info "部署 $pkg ..."
+
+    local rel_path
+    while IFS= read -r rel_path; do
+        rel_path="${rel_path#./}"
+        local target="$USER_HOME/$rel_path"
+        local target_dir
+        target_dir="$(dirname "$target")"
+        mkdir -p "$target_dir"
+
+        if [[ -L "$target" ]]; then
+            local existing_target
+            existing_target="$(readlink -f "$target" 2>/dev/null || true)"
+            if [[ "$existing_target" == "$PROJECT_DIR/dotfiles/$pkg/$rel_path" ]]; then
+                continue
+            fi
+            log_warn "  覆盖旧链接: $target"
+            rm -f "$target"
+        elif [[ -e "$target" ]]; then
+            log_warn "  备份已有文件: $rel_path"
+            cp -a "$target" "${target}.bak"
+            rm -f "$target"
+        fi
+
+        ln -sf "$PROJECT_DIR/dotfiles/$pkg/$rel_path" "$target"
+    done < <(cd "$pkg_dir" && find . -type f -o -type l)
+
+    # 确保脚本可执行
+    find "$pkg_dir" -name "*.sh" -type f -exec chmod +x {} \;
+
+    return 0
+}
+
+unstow_package() {
+    local pkg="$1"
+    local pkg_dir="$PROJECT_DIR/dotfiles/$pkg"
+
+    if [[ ! -d "$pkg_dir" ]]; then
+        return 0
+    fi
+
+    local rel_path
+    while IFS= read -r rel_path; do
+        rel_path="${rel_path#./}"
+        local target="$USER_HOME/$rel_path"
+        if [[ -L "$target" ]]; then
+            local link_target
+            link_target="$(readlink -f "$target" 2>/dev/null || true)"
+            if [[ "$link_target" == "$PROJECT_DIR/dotfiles/$pkg/$rel_path" ]]; then
+                rm -f "$target"
+            fi
+        fi
+    done < <(cd "$pkg_dir" && find . -type f -o -type l)
+}
+
 step_dotfiles() {
-    log_step "5/7 部署配置文件..."
+    log_step "5/7 部署配置文件 (stow symlink)..."
 
-    # --- Nemo actions & scripts ---
-    local NEMO_ACTIONS_DIR="$USER_HOME/.local/share/nemo/actions"
-    local NEMO_SCRIPTS_DIR="$USER_HOME/.local/share/nemo/scripts"
+    for pkg in "${DOTFILE_PACKAGES[@]}"; do
+        if ! stow_package "$pkg"; then
+            log_error "部署 $pkg 失败"
+            return 1
+        fi
+    done
 
-    mkdir -p "$NEMO_ACTIONS_DIR" "$NEMO_SCRIPTS_DIR"
-
-    log_info "复制 Nemo actions..."
-    cp -f "$PROJECT_DIR"/dotfiles/nemo/actions/*.nemo_action "$NEMO_ACTIONS_DIR/" || { log_error "Nemo actions 复制失败"; return 1; }
-
-    log_info "复制 Nemo scripts..."
-    cp -f "$PROJECT_DIR"/dotfiles/nemo/scripts/*.sh "$NEMO_SCRIPTS_DIR/" || { log_error "Nemo scripts 复制失败"; return 1; }
-    chmod +x "$NEMO_SCRIPTS_DIR"/*.sh
-
-    # --- OXWM 配置 ---
-    local OXWM_CONFIG_DIR="$USER_HOME/.config/oxwm"
-    mkdir -p "$OXWM_CONFIG_DIR"
-
-    log_info "复制 OXWM 配置..."
-    cp -f "$PROJECT_DIR"/dotfiles/oxwm/config.lua "$OXWM_CONFIG_DIR/" || { log_error "OXWM 配置复制失败"; return 1; }
-
-    # 填充 oxwm-start.sh 中的路径占位符
-    local OXWM_START_SRC="$PROJECT_DIR/dotfiles/oxwm/oxwm-start.sh"
-    local OXWM_START_DST="$OXWM_CONFIG_DIR/oxwm-start.sh"
-
-    log_info "生成 oxwm-start.sh..."
-    cp -f "$OXWM_START_SRC" "$OXWM_START_DST" || { log_error "oxwm-start.sh 生成失败"; return 1; }
-    chmod +x "$OXWM_START_DST"
-
-    # --- 其他 dotfiles ---
-    log_info "复制 dunstrc..."
-    mkdir -p "$USER_HOME/.config/dunst"
-    cp -f "$PROJECT_DIR"/dotfiles/dunst/dunstrc "$USER_HOME/.config/dunst/dunstrc" || { log_error "dunstrc 复制失败"; return 1; }
-
-    log_info "复制 picom.conf..."
-    mkdir -p "$USER_HOME/.config/picom"
-    cp -f "$PROJECT_DIR"/dotfiles/picom/picom.conf "$USER_HOME/.config/picom/picom.conf" || { log_error "picom.conf 复制失败"; return 1; }
-
-    log_info "复制 rofi 主题..."
-    mkdir -p "$USER_HOME/.config/rofi"
-    cp -f "$PROJECT_DIR"/dotfiles/rofi/theme.rasi "$USER_HOME/.config/rofi/theme.rasi" || { log_error "rofi 主题复制失败"; return 1; }
-
-    log_info "复制 rofi 电源菜单脚本..."
-    cp -f "$PROJECT_DIR"/dotfiles/rofi/sysact.sh "$USER_HOME/.config/rofi/sysact.sh" || { log_error "sysact.sh 复制失败"; return 1; }
-    chmod +x "$USER_HOME/.config/rofi/sysact.sh"
-
-    log_info "配置文件部署完成"
+    log_info "配置文件已部署为符号链接"
     return 0
 }
 
@@ -296,6 +332,23 @@ STEP_FUNCS=(
 )
 
 # ============================================================
+# CLI 参数处理
+# ============================================================
+
+if [[ "${1:-}" == "--redeploy-dotfiles" ]]; then
+    log_step "重新部署 dotfiles (stow symlink)..."
+    for pkg in "${DOTFILE_PACKAGES[@]}"; do
+        if stow_package "$pkg"; then
+            log_info "  $pkg: 完成"
+        else
+            log_error "  $pkg: 失败"
+        fi
+    done
+    log_info "重新部署完成"
+    exit 0
+fi
+
+# ============================================================
 # 主流程：顺序执行，失败则停止
 # ============================================================
 
@@ -321,7 +374,7 @@ for i in {0..6}; do
     # 全部完成
     if [[ $step_num -eq 7 ]]; then
         whiptail --msgbox --title "安装完成" \
-            "所有步骤已完成！\n\n请重启系统或重新登录，\n然后在 LightDM 界面选择 'oxwm' 会话。\n\n配置文件位置:\n  OXWM:  ~/.config/oxwm/\n  Dunst: ~/.config/dunst/dunstrc\n  Picom: ~/.config/picom/picom.conf\n  Rofi:  ~/.config/rofi/theme.rasi\n  Nemo:  ~/.local/share/nemo/actions/" \
+            "所有步骤已完成！\n\n请重启系统或重新登录，\n然后在 LightDM 界面选择 'oxwm' 会话。\n\n配置文件为符号链接，指向项目目录:\n  dotfiles/oxwm/  → ~/.config/oxwm/\n  dotfiles/dunst/ → ~/.config/dunst/\n  dotfiles/picom/ → ~/.config/picom/\n  dotfiles/rofi/  → ~/.config/rofi/\n  dotfiles/nemo/  → ~/.local/share/nemo/\n\n修改项目中的文件后，运行: bash install.sh --redeploy-dotfiles" \
             18 60
         exit 0
     fi
