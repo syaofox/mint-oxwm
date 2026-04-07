@@ -57,7 +57,7 @@ local blocks = {
             interval = 2,
             color = 0x7aa2f7,
         }),
-    })
+    }),
     oxwm.bar.block.static({
         text = "│",
         interval = 999999999,
