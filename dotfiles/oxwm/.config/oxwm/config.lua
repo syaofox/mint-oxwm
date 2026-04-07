@@ -60,12 +60,12 @@ local blocks = {
         color = colors.fg,
         underline = false,
     },
-    -- oxwm.bar.block.static({
-    --     text = "│",
-    --     interval = 999999999,
-    --     color = colors.lavender,
-    --     underline = false,
-    -- }),
+    oxwm.bar.block.static({
+        text = "│",
+        interval = 999999999,
+        color = colors.lavender,
+        underline = false,
+    }),
 
     -- GPU监控，支持NVIDIA和AMD显卡
     oxwm.bar.block.gpu({
@@ -74,12 +74,12 @@ local blocks = {
         color = colors.fg,
         underline = false,
     }),
-    -- oxwm.bar.block.static({
-    --     text = "│",
-    --     interval = 999999999,
-    --     color = colors.lavender,
-    --     underline = false,
-    -- }),
+    oxwm.bar.block.static({
+        text = "│",
+        interval = 999999999,
+        color = colors.lavender,
+        underline = false,
+    }),
 
     -- CPU监控，显示使用率百分比
     oxwm.bar.block.cpu({
@@ -95,12 +95,12 @@ local blocks = {
         color = colors.fg,
         underline = false,
     }),
-    -- oxwm.bar.block.static({
-    --     text = "│",
-    --     interval = 999999999,
-    --     color = colors.lavender,
-    --     underline = false,
-    -- }),
+    oxwm.bar.block.static({
+        text = "│",
+        interval = 999999999,
+        color = colors.lavender,
+        underline = false,
+    }),
 
     -- oxwm.bar.block.shell({
     --     format = "{}",
@@ -122,12 +122,12 @@ local blocks = {
         color = colors.cyan,
         underline = false,
     }),
-    -- oxwm.bar.block.static({
-    --     text = "│",
-    --     interval = 999999999,
-    --     color = colors.lavender,
-    --     underline = false,
-    -- }),
+    oxwm.bar.block.static({
+        text = "│",
+        interval = 999999999,
+        color = colors.lavender,
+        underline = false,
+    }),
     oxwm.bar.block.shell({
         format = "Vol: {}%",
         command = "pactl get-sink-volume @DEFAULT_SINK@ | grep -o '[0-9]*%' | head -1 | tr -d '%'",
