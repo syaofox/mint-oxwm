@@ -56,6 +56,7 @@ local blocks = {
             format = "CPU: {}%",
             interval = 2,
             color = 0x7aa2f7,
+            underline = true,
         }),
     }),
     oxwm.bar.block.static({
