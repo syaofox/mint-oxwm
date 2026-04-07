@@ -57,7 +57,7 @@ step_deps() {
         zenity x11-xserver-utils catfish vim lxappearance \
         fcitx5 fcitx5-chinese-addons fcitx5-frontend-gtk3 \
         fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-material-color \
-        gnome-keyring lxpolkit wget curl xz-utils \
+        gnome-keyring policykit-1-gnome wget curl xz-utils \
         slock \
         whiptail file rsync; then
         log_info "系统依赖安装完成"

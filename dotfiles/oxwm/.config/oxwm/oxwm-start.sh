@@ -125,7 +125,7 @@ fi
 
 # Polkit 认证代理（lxpolkit）
 # 用于 GUI 程序提权时弹出密码输入框（如磁盘管理、软件安装等）
-start_once lxpolkit
+start_once start_once /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 
 # 合成器（后台模式，指定配置文件）
 start_once picom -b --config "$PICOM_PATH"
