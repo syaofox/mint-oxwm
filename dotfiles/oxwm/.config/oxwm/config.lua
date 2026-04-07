@@ -171,7 +171,7 @@ oxwm.gaps.set_outer(5, 5)
 -- - Configure window behavior based on title or class
 
 -- Examples (uncomment to use):
-oxwm.rule.add({ class = "Pavucontrol ", floating = true })
+oxwm.rule.add({ class = "Pavucontrol", floating = true })
 -- oxwm.rule.add({ instance = "gimp", floating = true })
 -- oxwm.rule.add({ class = "Alacritty", tag = 9, focus = true })
 -- oxwm.rule.add({ class = "firefox", title = "Library", floating = true })
