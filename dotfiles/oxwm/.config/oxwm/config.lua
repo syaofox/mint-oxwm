@@ -73,6 +73,7 @@ local blocks = {
         interval = 3,
         color = colors.purple,
         underline = false,
+        click = "gnome-terminal -e btop",
     }),
     oxwm.bar.block.static({
         text = "│",
