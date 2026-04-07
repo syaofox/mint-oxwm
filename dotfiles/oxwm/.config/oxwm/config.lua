@@ -124,6 +124,7 @@ local blocks = {
         interval = 1,
         color = colors.cyan,
         underline = false,
+        click = "gnome-calendar",
     }),
     oxwm.bar.block.static({
         text = "│",
@@ -216,6 +217,7 @@ oxwm.gaps.set_outer(5, 5)
 -- Examples (uncomment to use):
 oxwm.rule.add({ class = "Pavucontrol", floating = true })
 oxwm.rule.add({ class = "Nm-connection-editor", floating = true })
+oxwm.rule.add({ class = "gnome-calendar", floating = true })
 -- oxwm.rule.add({ instance = "gimp", floating = true })
 -- oxwm.rule.add({ class = "Alacritty", tag = 9, focus = true })
 -- oxwm.rule.add({ class = "firefox", title = "Library", floating = true })
