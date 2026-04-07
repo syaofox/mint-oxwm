@@ -233,6 +233,8 @@ oxwm.key.bind({ modkey }, "V", oxwm.spawn("xfce4-clipman-history"))
 oxwm.key.bind({ modkey }, "S", oxwm.spawn({ "sh", "-c", "maim -s | xclip -selection clipboard -t image/png" }))
 -- Save screenshot to $HOME/Pictures/Screenshots
 oxwm.key.bind({ modkey, "Shift" }, "S", oxwm.spawn({ "sh", "-c", "maim -s $HOME/Pictures/Screenshots/screenshot_$(date +%Y%m%d_%H%M%S).png" }))
+
+
 oxwm.key.bind({ modkey }, "Q", oxwm.client.kill())
 
 -- System power menu (Ctrl+Alt+Delete)
