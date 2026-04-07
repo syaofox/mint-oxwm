@@ -51,6 +51,19 @@ local bar_font = "monospace:style=Bold:size=10"
 -- Define your blocks
 -- Similar to widgets in qtile, or dwmblocks
 local blocks = {
+    oxwm.bar.set_blocks({
+        oxwm.bar.block.cpu({
+            format = "CPU: {}%",
+            interval = 2,
+            color = 0x7aa2f7,
+        }),
+    })
+    oxwm.bar.block.static({
+        text = "│",
+        interval = 999999999,
+        color = colors.lavender,
+        underline = false,
+    }),
     oxwm.bar.block.ram({
         format = "Ram: {used}/{total} GB",
         interval = 5,
