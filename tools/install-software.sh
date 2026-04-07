@@ -217,4 +217,4 @@ done
 
 log_step "安装完成!"
 echo ""
-log_info "提示: 如果安装了 Docker, 需重新登录以使 docker 组权限生效"
+log_info "提示: 如果安装了 Docker, 需要重启以使 docker 组权限生效"
