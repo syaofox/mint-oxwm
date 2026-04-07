@@ -110,7 +110,7 @@ local blocks = {
         underline = false,
     }),
     oxwm.bar.block.shell({
-        format = "󰖀{}%",
+        format = "󰖀 {}%",
         command = "pactl get-sink-volume @DEFAULT_SINK@ | grep -o '[0-9]*%' | head -1 | tr -d '%'",
         interval = 1,
         color = colors.green,
