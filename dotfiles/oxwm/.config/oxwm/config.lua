@@ -54,7 +54,7 @@ local blocks = {
 
     -- 网速
     oxwm.bar.block.netspeed{
-        format = "{rx}/{tx} {tx_unit}",
+        format = "{rx}/{tx} Mbps",
         interface = "",  -- 留空则自动检测
         interval = 2,
         color = 0x0db9d7,
