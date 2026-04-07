@@ -52,6 +52,21 @@ local bar_font = "JetBrainsMono Nerd Font Propo:style=Bold:size=10"
 -- Similar to widgets in qtile, or dwmblocks
 local blocks = {
 
+    -- 网速
+    oxwm.bar.block.netspeed{
+        format = "{rx} {rx_unit} / {tx} {tx_unit}",
+        interface = "",  -- 留空则自动检测
+        interval = 2,
+        color = 0x0db9d7,
+    },
+    oxwm.bar.block.static({
+        text = "│",
+        interval = 999999999,
+        color = colors.lavender,
+        underline = false,
+    }),
+
+    -- GPU监控，支持NVIDIA和AMD显卡
     oxwm.bar.block.gpu({
         format = "GPU {gpu_util}% VRAM {vram_used}/{vram_total}G",
         interval = 3,
@@ -64,12 +79,15 @@ local blocks = {
         color = colors.lavender,
         underline = false,
     }),
+
+    -- CPU监控，显示使用率百分比
     oxwm.bar.block.cpu({
         format = "CPU: {}%",
         interval = 2,
         color = 0x7aa2f7,
         underline = false,
     }),    
+    -- 内存监控，显示已用和总内存（单位GB）
     oxwm.bar.block.ram({
         format = "Ram: {used}/{total} GB",
         interval = 5,
