@@ -59,6 +59,7 @@ local blocks = {
         interval = 2,
         color = colors.fg,
         underline = false,
+        click = "nm-connection-editor",
     },
     oxwm.bar.block.static({
         text = "│",
